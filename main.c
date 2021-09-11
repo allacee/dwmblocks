@@ -53,8 +53,11 @@ void getCommand(int i, const char *button) {
 		char *command[] = {"/bin/sh", "-c", cmd, NULL};
 		if (button) 
 			setenv("BLOCK_BUTTON", button, 1);
-		if (block->graph) 
-			setenv("GRAPH", &block->output[strlen(block->output) - strlen(blankGraph)], 1);
+		if (block->graph)
+			if (strlen(block->output) > 10)
+				setenv("GRAPH", &block->output[strlen(block->output) - strlen(blankGraph)], 1);
+			else 
+				setenv("GRAPH", blankGraph, 1);
 		setsid();
 		execvp(command[0], command);
 	}
@@ -193,7 +196,6 @@ int main(int argc, char **argv) {
 		Block *block = blocks + i;
 		pipe(block->pipe);
 		fcntl(block->pipe[0], F_SETFL, O_NONBLOCK);
-		if (block->graph) strcpy(block->output, blankGraph);
 		if (block->signal) block->output[0] = block->signal;
 	}
 

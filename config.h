@@ -16,6 +16,7 @@ static Block blocks[] = {
 	{"sb-graph-cpu", 2, 17, 1},
 	{"sb-graph-mem", 2, 16, 1},
 	{"sb-gpu-mode", 0, 15},
+	{"sb-jupyter", 5, 19},
 	{"sb-brightness", 0, 14},
 	{"sb-volume", 0, 12},
 	{"sb-battery", 5, 11},

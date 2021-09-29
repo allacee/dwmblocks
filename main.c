@@ -40,6 +40,10 @@ void replace(char *str, char old, char new) {
 
 void getCommand(int i, const char *button) {
 	Block *block = blocks + i;
+	if (!block->visible){
+		writeStatus();
+		return;
+	}
 
 	if (fork() == 0) {
 		dup2(block->pipe[1], STDOUT_FILENO);
@@ -65,21 +69,17 @@ void getCommand(int i, const char *button) {
 
 void getCommands(int time) {
 	for (int i = 0; i < LEN(blocks); i++)
-		if (time == 0 || (blocks[i].interval != 0 && time % blocks[i].interval == 0))
+		if (time == 0 || (blocks[i].interval != 0 && time % blocks[i].interval == 0) && blocks[i].visible)
 			getCommand(i, NULL);
 }
 
-void getSignalCommand(int signal) {
-	for (int i = 0; i < LEN(blocks); i++)
-		if (blocks[i].signal == signal)
-			getCommand(i, NULL);
-}
 
 int getStatus(char *new, char *old) {
 	strcpy(old, new);
 	new[0] = '\0';
 	for (int i = 0; i < LEN(blocks); i++) {
 		Block *block = blocks + i;
+		if (!block->visible) continue;
 		if (strlen(block->output) > (block->signal != 0))
 			strcat(new, DELIMITER);
 		strcat(new, block->output);
@@ -121,10 +121,15 @@ void termHandler(int signal) {
 	exit(EXIT_SUCCESS);
 }
 
+void blocksChangeHandler(int signal) {
+	blocks[5].visible = !blocks[5].visible;
+	getCommand(5, NULL);
+	printf("%d\n", blocks[5].visible);
+}
+
 void childHandler() {
 	for (int i = 0; i < LEN(blocks); i++) {
 		Block *block = blocks + i;
-
 		int bytesToRead = CMDLENGTH;
 		char *output = block->output;
 		if (block->signal) output++, bytesToRead--;
@@ -144,6 +149,7 @@ void childHandler() {
 void setupSignals() {
 	signal(SIGTERM, termHandler);
 	signal(SIGINT, termHandler);
+	signal(10, blocksChangeHandler);
 
 	// Handle block update signals
 	struct sigaction sa;

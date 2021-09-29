@@ -122,9 +122,10 @@ void termHandler(int signal) {
 }
 
 void blocksChangeHandler(int signal) {
-	blocks[5].visible = !blocks[5].visible;
-	getCommand(5, NULL);
-	printf("%d\n", blocks[5].visible);
+	for (int i = 0; i < LEN(blocks) - 1; i++) {
+		blocks[i].visible = !blocks[i].visible;
+		getCommand(i, NULL);
+	}
 }
 
 void childHandler() {

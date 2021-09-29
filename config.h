@@ -17,11 +17,11 @@ static Block blocks[] = {
 	{ "sb-weather", 		3600, 	19,		1,		0 },
 	{ "sb-graph-cpu", 		2, 		18, 	1,		1 },
 	{ "sb-graph-mem", 		2, 		17, 	1,		1 },
-	{ "sb-gpu-mode", 		0, 		16,		1,		0 },
+	{ "sb-gpu-mode", 		0, 		16,		0,		0 },
 	{ "sb-jupyter", 		5, 		15,		0,		0 },
 	{ "sb-brightness", 		0, 		14,		1,		0 },
-	{ "sb-volume", 			0, 		12,		1,		0 },
-	{ "sb-battery", 		5, 		11,		1,		0 },
-	{ "sb-datetime", 		1, 		10,		1,		0 },
+	{ "sb-volume", 			0, 		13,		1,		0 },
+	{ "sb-battery", 		5, 		12,		1,		0 },
+	{ "sb-datetime", 		1, 		11,		1,		0 },
 };
 
